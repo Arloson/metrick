@@ -1,0 +1,43 @@
+version: "3"
+networks:
+ backend:
+   external: true
+  
+services:
+  graf:
+   image: grafana/grafana
+   volumes:
+    - /home/sergey/metrick/grafana:/var/lib/grafana:rw
+    
+   ports:
+    - 3000:3000
+   networks:
+    - backend
+
+  promet:
+   image: prom/prometheus
+   networks:
+    - backend
+   volumes:
+    - ./prometheus:/etc/prometheus:rw
+   ports:
+    - 9090:9090
+
+
+  node:
+   image: prom/node-exporter
+   networks:
+    - backend
+   ports:
+    - 9100:9100
+   volumes:
+    - /proc:/host/proc
+    - /sys:/host/sys
+    - /:/rootfs
+
+   command:
+  #   #- '--collectors.enabled'
+     - '--path.procfs=/host/proc'
+     - '--path.sysfs=/host/sys'
+     - '--path.rootfs=/rootfs'
+  #   - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'   
