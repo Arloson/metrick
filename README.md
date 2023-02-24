@@ -1,2 +1,2 @@
-grafana+node+prometheus
-RUN: docker-compose up
+## grafana+node+prometheus.
+# RUN: docker-compose up
